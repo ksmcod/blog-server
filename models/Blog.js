@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema
 
-const blogSchema = new Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -19,4 +19,4 @@ const blogSchema = new Schema({
     }
 });
 
-const blogModel = mongoose.model('Blog',blogSchema);
+const userModel = mongoose.model('User',blogSchema);
