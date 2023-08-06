@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-// initialize app
+// Initialize app
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -15,9 +15,9 @@ app.get('/test',(req,res) => {
     res.json({ res:"Everything good!" });
 })
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-    app.listen(port,() => {
-        console.log(`Connected to db & listening on port ${port}`);
-    })
-});
+// mongoose.connect(process.env.MONGO_URI)
+// .then(() => {
+//     app.listen(port,() => {
+//         console.log(`Connected to db & listening on port ${port}`);
+//     })
+// });
