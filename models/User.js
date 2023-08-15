@@ -30,8 +30,10 @@ userSchema.statics.register = async function(username, email, password) {
         throw Error("Please enter a valid email!");
     }
 
-    const usedUsername = this.find({ username });
-    const usedEmail = this.find({ email });
+    const usedUsername = await this.findOne({ username });
+    console.log("Used username: ",usedUsername);
+    const usedEmail = await this.findOne({ email });
+    console.log("Used email: ",usedEmail)
 
     if(usedUsername) {
         throw Error('This username is already in use!');
@@ -52,3 +54,5 @@ userSchema.statics.register = async function(username, email, password) {
 }
 
 const userModel = mongoose.model('user',userSchema);
+
+module.exports = userModel;

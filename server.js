@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const router = require('./routes/authRouter')
+const authRouter = require('./routes/authRouter')
 require('dotenv').config();
 
 // Initialize app
@@ -11,20 +11,17 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 
-// Routes
-app.get('/test',(req,res) => {
-    res.json({ res:"Everything good!" });
-})
+// Router
+app.use('/api/user',authRouter);
 
-app.use('/api/user',router);
 
-app.listen(port,() => {
-    console.log(`Server listening on port ${port}`);
-})
+// app.listen(port,() => {
+//     console.log(`Server listening on port ${port}`);
+// })
 
-// mongoose.connect(process.env.MONGO_URI)
-// .then(() => {
-//     app.listen(port,() => {
-//         console.log(`Connected to db & listening on port ${port}`);
-//     })
-// });
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+    app.listen(port,() => {
+        console.log(`Connected to db & listening on port ${port}`);
+    })
+});
