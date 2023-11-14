@@ -1,77 +1,80 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcrypt");
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username: {
-        type:String,
-        required:true,
-        unique: true
-    },
-    email: {
-        type:String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type:String,
-        required: true
-    }
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
 });
 
-userSchema.statics.register = async function(username, email, password) {
-    if(!username || !email || !password) {
-        throw Error("All the fields must be filled!");
-    }
+userSchema.statics.register = async function (username, email, password) {
+  if (!username || !email || !password) {
+    throw Error("All the fields must be filled!");
+  }
 
-    if(!validator.isEmail(email)) {
-        throw Error("Please enter a valid email!");
-    }
+  if (!validator.isEmail(email)) {
+    throw Error("Please enter a valid email!");
+  }
 
-    const usedUsername = await this.findOne({ username });
-    console.log("Used username: ",usedUsername);
-    const usedEmail = await this.findOne({ email });
-    console.log("Used email: ",usedEmail)
+  const usedUsername = await this.findOne({ username });
+  console.log("Used username: ", usedUsername);
 
-    if(usedUsername) {
-        throw Error('This username is already in use!');
-    }
+  const usedEmail = await this.findOne({ email });
+  console.log("Used email: ", usedEmail);
 
-    if(usedEmail) {
-        throw Error("This email is already in use!");
-    }
+  if (usedUsername) {
+    throw Error("This username is already in use!");
+  }
 
-    const salt = await bcrypt.genSalt(13)
-    const hash = await bcrypt.hash(password,salt);
+  if (usedEmail) {
+    throw Error("This email is already in use!");
+  }
 
-    const user = await this.create({ username, email, password:hash });
-    console.log(user);
+  const salt = await bcrypt.genSalt(13);
+  const hash = await bcrypt.hash(password, salt);
 
-    return user;
-}
+  const user = await this.create({ username, email, password: hash });
+  console.log(user);
 
-userSchema.statics.login = async function(email, password) {
-    if(!email || !password) {
-        throw Error("All fields must be filled!");
-    }
+  return user;
+};
 
-    const user = await this.findOne({ email });
+userSchema.statics.login = async function (email, password) {
+  if (!email || !password) {
+    throw Error("All fields must be filled!");
+  }
 
-    if(!user) {
-        throw Error("The email or password is incorrect!");
-    }
+  const user = await this.findOne({ email });
 
-    const result = await bcrypt.compare(password,user.password);
+  if (!user) {
+    throw Error("The email or password is incorrect!");
+  }
 
-    if(!result) {
-        throw Error("The email or password is incorrect!");
-    }
+  const result = await bcrypt.compare(password, user.password);
 
-    return user;
-}
+  if (!result) {
+    throw Error("The email or password is incorrect!");
+  }
 
-const userModel = mongoose.model('user',userSchema);
+  return user;
+};
+
+const userModel = mongoose.model("user", userSchema);
 
 module.exports = userModel;
