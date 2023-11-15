@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 function createToken(payload) {
-  return jwt.sign({ payload }, process.env.SECRET, { expiresIn: 60 * 5 });
+  return jwt.sign(payload, process.env.SECRET, { expiresIn: 60 * 5 });
 }
 
 module.exports.register_post = async (req, res) => {

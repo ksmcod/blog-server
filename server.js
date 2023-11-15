@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/authRouter");
+const userRouter = require("./routes/userRouter");
 require("dotenv").config();
 
 // Initialize app
@@ -21,7 +22,13 @@ app.use(
 app.use(cookieParser());
 
 // Router
-app.use("/api/user", authRouter);
+app.use("*", (req, res, next) => {
+  console.log(req.originalUrl);
+  next();
+});
+
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 // app.listen(port,() => {
 //     console.log(`Server listening on port ${port}`);
