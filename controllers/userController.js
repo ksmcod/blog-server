@@ -14,6 +14,6 @@ module.exports.user_get = async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.log(error.message);
-    res.sendStatus(401);
+    res.end();
   }
 };
