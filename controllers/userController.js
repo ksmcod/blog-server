@@ -17,3 +17,9 @@ module.exports.user_get = async (req, res) => {
     res.end();
   }
 };
+
+module.exports.logout_post = async (req, res) => {
+  const { user_token } = req.cookies;
+  res.clearCookie("user_token");
+  res.status(200).end();
+};
