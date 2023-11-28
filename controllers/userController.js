@@ -20,16 +20,15 @@ module.exports.user_get = async (req, res) => {
 
 module.exports.user_post = async (req, res) => {
   const { username, email, password } = req.body;
-  console.log(`username: ${username}, email: ${email}, password: ${password}`);
-
   const { user_token } = req.cookies;
 
   try {
-    const { id } = jwt.verify(user_token, PROCESS.ENV.SECRET);
-    const user = User.findById(id);
+    const { id } = jwt.verify(user_token, process.env.SECRET);
+    const user = await User.updateUser(id, username, email, password);
     res.status(200).json(user);
   } catch (error) {
     console.log(error.message);
+    res.status(401).json({ message: error.message });
   }
 };
 

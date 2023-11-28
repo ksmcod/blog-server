@@ -36,10 +36,8 @@ userSchema.statics.register = async function (username, email, password) {
   }
 
   const usedUsername = await this.findOne({ username });
-  console.log("Used username: ", usedUsername);
 
   const usedEmail = await this.findOne({ email });
-  console.log("Used email: ", usedEmail);
 
   if (usedUsername) {
     throw Error("This username is already in use!");
@@ -76,6 +74,33 @@ userSchema.statics.login = async function (email, password) {
   }
 
   return user;
+};
+
+userSchema.statics.updateUser = async function (id, username, email, password) {
+  const user = await this.findById(id);
+
+  if (username !== "") {
+    const usedUsername = await this.findOne({ username });
+    if (usedUsername) throw Error("This username is already in use!");
+    user.username = username;
+  }
+
+  if (email !== "") {
+    if (!validator.isEmail(email)) throw Error("Email is invalid");
+    const usedEmail = await this.findOne({ email });
+
+    if (usedEmail) throw Error("This email is already in use!");
+    user.email = email;
+  }
+
+  if (password !== "") {
+    const salt = await bcrypt.genSalt(13);
+    const hash = await bcrypt.hash(password, salt);
+    user.password = hash;
+  }
+
+  const updatedUser = await user.save();
+  return updatedUser;
 };
 
 const userModel = mongoose.model("user", userSchema);
