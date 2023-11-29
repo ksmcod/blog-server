@@ -7,7 +7,7 @@ module.exports.blog_post = async (req, res) => {
 
   try {
     const { id } = jwt.verify(user_token, process.env.SECRET);
-    const blog = await Blog.create({ title, body: content, author: id });
+    const blog = await Blog.createBlog(title, content, id);
     console.log("Blog created: ", blog);
     res.status(201).json(blog);
   } catch (error) {
@@ -17,6 +17,6 @@ module.exports.blog_post = async (req, res) => {
       return res.status(401).json({ error: error.message });
     }
 
-    res.status(400).json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 };
