@@ -25,10 +25,10 @@ module.exports.user_post = async (req, res) => {
   try {
     const { id } = jwt.verify(user_token, process.env.SECRET);
     const user = await User.updateUser(id, username, email, password);
-    res.status(200).json(user);
+    res.status(200).json({ username: user.username, email: user.email });
   } catch (error) {
     console.log(error.message);
-    res.status(401).json({ message: error.message });
+    res.status(401).json({ error: error.message });
   }
 };
 
