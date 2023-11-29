@@ -21,8 +21,8 @@ const blogSchema = new Schema(
 );
 
 blogSchema.statics.createBlog = async function (title, content, author) {
-  if (!title) throw Error("Title must be defined");
-  if (!content) throw Error("Content must be defined");
+  if (!title) throw Error("The blog must have a title");
+  if (!content) throw Error("The blog must hava some content");
 
   const blog = new this({ title, content, author });
   await blog.save();
