@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
+const blogRouter = require("./routes/blogRouter");
 require("dotenv").config();
 
 // Initialize app
@@ -31,6 +32,7 @@ app.use("*", (req, res, next) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/blog", blogRouter);
 
 // app.listen(port,() => {
 //     console.log(`Server listening on port ${port}`);

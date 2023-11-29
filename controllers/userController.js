@@ -28,7 +28,12 @@ module.exports.user_post = async (req, res) => {
     res.status(200).json({ username: user.username, email: user.email });
   } catch (error) {
     console.log(error.message);
-    res.status(401).json({ error: error.message });
+
+    if (error.name == "JsonWebTokenError") {
+      return res.status(401).json({ error: error.message });
+    }
+
+    res.status(400).json({ error: error.message });
   }
 };
 
