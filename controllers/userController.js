@@ -38,14 +38,14 @@ module.exports.user_post = async (req, res) => {
 };
 
 module.exports.findById_get = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   try {
     const user = await User.findById(id, { _id: false, username: true });
     res.status(200).json(user);
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: "User does not exist!" });
   }
 };
 
